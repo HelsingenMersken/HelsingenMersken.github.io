@@ -1,105 +1,206 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  
-  <title>树莓派下岗再就业-ZeroTier内网穿透 | Welcome To HelsingenMersken</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="需要截图的部分等新图床弄好后再补离校后进不了校园内网，但是万一需要的时候就很麻烦，于是我看向了边上的树莓派 zerotier安装注册账号https:&#x2F;&#x2F;www.zerotier.com&#x2F;接着新建网络，类型选择PRIVATE 客户端安装Windows下载安装客户端，并右击添加网络，将上一步获得的16位Network ID填入注意复制的时候不要带换行或空格符号 Linux安装 1curl -s htt">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>树莓派下岗再就业-ZeroTier内网穿透 | Welcome To HelsingenMersken</title><meta name="author" content="HelsingenMersken"><meta name="copyright" content="HelsingenMersken"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="需要截图的部分等新图床弄好后再补离校后进不了校园内网，但是万一需要的时候就很麻烦，于是我看向了边上的树莓派 zerotier安装注册账号https:&#x2F;&#x2F;www.zerotier.com&#x2F;接着新建网络，类型选择PRIVATE 客户端安装Windows下载安装客户端，并右击添加网络，将上一步获得的16位Network ID填入注意复制的时候不要带换行或空格符号 Linux安装 1curl -s htt">
 <meta property="og:type" content="article">
 <meta property="og:title" content="树莓派下岗再就业-ZeroTier内网穿透">
 <meta property="og:url" content="http://blog.arbalest.space/2021/09/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8B%E5%B2%97%E5%86%8D%E5%B0%B1%E4%B8%9A-ZeroTier%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/index.html">
 <meta property="og:site_name" content="Welcome To HelsingenMersken">
 <meta property="og:description" content="需要截图的部分等新图床弄好后再补离校后进不了校园内网，但是万一需要的时候就很麻烦，于是我看向了边上的树莓派 zerotier安装注册账号https:&#x2F;&#x2F;www.zerotier.com&#x2F;接着新建网络，类型选择PRIVATE 客户端安装Windows下载安装客户端，并右击添加网络，将上一步获得的16位Network ID填入注意复制的时候不要带换行或空格符号 Linux安装 1curl -s htt">
-<meta property="og:locale">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.arbalest.space/img/butterfly-icon.png">
 <meta property="article:published_time" content="2021-09-22T12:00:00.000Z">
 <meta property="article:modified_time" content="2021-10-08T07:49:08.000Z">
 <meta property="article:author" content="HelsingenMersken">
 <meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Welcome To HelsingenMersken" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
-
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
-  
-    
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
-
-  
-<meta name="generator" content="Hexo 5.4.0"></head>
-
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Welcome To HelsingenMersken</a>
-      </h1>
+<meta name="twitter:image" content="http://blog.arbalest.space/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "树莓派下岗再就业-ZeroTier内网穿透",
+  "url": "http://blog.arbalest.space/2021/09/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8B%E5%B2%97%E5%86%8D%E5%B0%B1%E4%B8%9A-ZeroTier%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/",
+  "image": "http://blog.arbalest.space/img/butterfly-icon.png",
+  "datePublished": "2021-09-22T12:00:00.000Z",
+  "dateModified": "2021-10-08T07:49:08.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "HelsingenMersken",
+      "url": "http://blog.arbalest.space"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://blog.arbalest.space/2021/09/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8B%E5%B2%97%E5%86%8D%E5%B0%B1%E4%B8%9A-ZeroTier%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css?v=5.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css"><script>
+    (() => {
       
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Suche"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.arbalest.space"></form>
-      </div>
-    </div>
-  </div>
-</header>
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
 
-      <div class="outer">
-        <section id="main"><article id="post-树莓派下岗再就业-ZeroTier内网穿透" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2021/09/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8B%E5%B2%97%E5%86%8D%E5%B0%B1%E4%B8%9A-ZeroTier%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" class="article-date">
-  <time class="dt-published" datetime="2021-09-22T12:00:00.000Z" itemprop="datePublished">2021-09-22</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/raspberry/">raspberry</a>
-  </div>
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
 
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
   
-    <h1 class="p-name article-title" itemprop="headline name">
-      树莓派下岗再就业-ZeroTier内网穿透
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
       
-        <p><span style="border-bottom:2px dashed red;">需要截图的部分等新图床弄好后再补</span><br>离校后进不了校园内网，但是万一需要的时候就很麻烦，于是我看向了边上的树莓派</p>
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '树莓派下岗再就业-ZeroTier内网穿透',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about_me/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Welcome To HelsingenMersken</span></a><a class="nav-page-title" href="/"><span class="site-name">树莓派下岗再就业-ZeroTier内网穿透</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about_me/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">树莓派下岗再就业-ZeroTier内网穿透</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-09-22T12:00:00.000Z" title="发表于 2021-09-22 20:00:00">2021-09-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-10-08T07:49:08.000Z" title="更新于 2021-10-08 15:49:08">2021-10-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/raspberry/">raspberry</a></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p><span style="border-bottom:2px dashed red;">需要截图的部分等新图床弄好后再补</span><br>离校后进不了校园内网，但是万一需要的时候就很麻烦，于是我看向了边上的树莓派</p>
 <h1 id="zerotier安装"><a href="#zerotier安装" class="headerlink" title="zerotier安装"></a>zerotier安装</h1><h2 id="注册账号"><a href="#注册账号" class="headerlink" title="注册账号"></a>注册账号</h2><p><a target="_blank" rel="noopener" href="https://www.zerotier.com/">https://www.zerotier.com/</a><br>接着新建网络，类型选择PRIVATE</p>
 <h2 id="客户端安装"><a href="#客户端安装" class="headerlink" title="客户端安装"></a>客户端安装</h2><h3 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h3><p>下载安装客户端，并右击添加网络，将上一步获得的16位Network ID填入<strong>注意复制的时候不要带换行或空格符号</strong></p>
 <h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><p>安装</p>
@@ -129,146 +230,8 @@
 <p>查看 iptables 配置文件内容</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo iptables-save </span><br></pre></td></tr></table></figure>
 <h1 id="路由设置"><a href="#路由设置" class="headerlink" title="路由设置"></a>路由设置</h1><h2 id="授权"><a href="#授权" class="headerlink" title="授权"></a>授权</h2><p>进入zerotier控制台，将下来到设备可以看到第一步加入的设备，勾选Auth?</p>
-<h2 id="设置路由"><a href="#设置路由" class="headerlink" title="设置路由"></a>设置路由</h2><p>Managed Routes项中添加0.0.0.0/0（全局转发，可根据需求设置）</p>
+<h2 id="设置路由"><a href="#设置路由" class="headerlink" title="设置路由"></a>设置路由</h2><p>Managed Routes项中添加0.0.0.0&#x2F;0（全局转发，可根据需求设置）</p>
 <h2 id="客户端设置"><a href="#客户端设置" class="headerlink" title="客户端设置"></a>客户端设置</h2><h3 id="Windows-1"><a href="#Windows-1" class="headerlink" title="Windows"></a>Windows</h3><p>Allow Default Route勾选转发<br><strong>不用的时候一定记得取消勾选，否则客户端退出后无法正常使用网络</strong></p>
 <h3 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h3><p>在设置中勾选转发</p>
 <h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/RadiantJeral/article/details/107913539" title="【网络通信】【zeorTier】基于 zerotier 使用 Linux Kernel 设置转发代理">【网络通信】【zeorTier】基于 zerotier 使用 Linux Kernel 设置转发代理</a><br><a target="_blank" rel="noopener" href="https://docs.zerotier.com/" title="ZeroTier Documentation">ZeroTier Documentation</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.arbalest.space/2021/09/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8B%E5%B2%97%E5%86%8D%E5%B0%B1%E4%B8%9A-ZeroTier%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" data-id="cl6npf1fy0013h4t960a7cqkc" data-title="树莓派下岗再就业-ZeroTier内网穿透" class="article-share-link">Teilen</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2021/09/30/Makefile/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Neuer</strong>
-      <div class="article-nav-title">
-        
-          Makefile
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2021/01/21/rts%E3%80%81dtr%E4%B8%8E%E4%B8%80%E9%94%AE%E4%B8%8B%E8%BD%BD%E7%94%B5%E8%B7%AF/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Älter</strong>
-      <div class="article-nav-title">RTS、DTR与一键下载电路</div>
-    </a>
-  
-</nav>
-
-  
-</article>
-
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/New-World/">New World</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/raspberry/">raspberry</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/stm32/">stm32</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%B6%E5%AE%83%E5%8D%95%E7%89%87%E6%9C%BA/">其它单片机</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">踩坑记录</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2021/12/31/2021%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/">2021年终总结</a>
-          </li>
-        
-          <li>
-            <a href="/2021/10/13/%E5%91%8A%E5%88%ABVM%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%8C%E4%BD%BF%E7%94%A8WSL%E5%AE%89%E8%A3%85%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%99%A8/">告别VM虚拟机，使用WSL安装交叉编译器</a>
-          </li>
-        
-          <li>
-            <a href="/2021/09/30/Makefile/">Makefile</a>
-          </li>
-        
-          <li>
-            <a href="/2021/09/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8B%E5%B2%97%E5%86%8D%E5%B0%B1%E4%B8%9A-ZeroTier%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/">树莓派下岗再就业-ZeroTier内网穿透</a>
-          </li>
-        
-          <li>
-            <a href="/2021/01/21/rts%E3%80%81dtr%E4%B8%8E%E4%B8%80%E9%94%AE%E4%B8%8B%E8%BD%BD%E7%94%B5%E8%B7%AF/">RTS、DTR与一键下载电路</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-      &copy; 2022 HelsingenMersken<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-
-<script src="/js/jquery-3.4.1.min.js"></script>
-
-
-
-  
-<script src="/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-
-  </div>
-</body>
-</html>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.arbalest.space">HelsingenMersken</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.arbalest.space/2021/09/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8B%E5%B2%97%E5%86%8D%E5%B0%B1%E4%B8%9A-ZeroTier%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/">http://blog.arbalest.space/2021/09/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8B%E5%B2%97%E5%86%8D%E5%B0%B1%E4%B8%9A-ZeroTier%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.arbalest.space" target="_blank">Welcome To HelsingenMersken</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2021/09/30/Makefile/" title="Makefile"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Makefile</div></div><div class="info-2"><div class="info-item-1">基本格式123目标...:依赖...    命令    ... 注意为Tab，不得出现空格 变量系统变量$(变量名) 自定义变量 &#x3D; 延迟变量(不调用不改变) :&#x3D; 立即赋值 ?&#x3D; 空赋值 +&#x3D; 追加赋值  自动化变量 $&lt; 第一个依赖文件 $^ 全部的依赖文件，若目标中有重复文件将只保留一份 $@ 目标的集合 $% 当目标为函数库的时候表示规则中的目标成员名。若目标不是函数库文件则值为空 $? 所有比目标新的依赖目标集合，以空格隔开 $* 表示目标模式中”%”及其以前的部分 $+ $^类似但不主动除去  伪目标仅执行命令的目标与目录下存在的文件名冲突时，例如clean声明方式： 1.PHONY:clean 模式规则% 长度任意的非空字符串，当”%”出现在目标时，目标中的”%”决定依赖中的”%”值 条件分支123456ifeq (var1,var2)...else...endif 123456ifneq (var1,var2)...else...endif 函数模式替换函数patsubst$(patsubst %.c,%.o,x.c....</div></div></div></a><a class="pagination-related" href="/2021/01/21/rts%E3%80%81dtr%E4%B8%8E%E4%B8%80%E9%94%AE%E4%B8%8B%E8%BD%BD%E7%94%B5%E8%B7%AF/" title="RTS、DTR与一键下载电路"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">RTS、DTR与一键下载电路</div></div><div class="info-2"><div class="info-item-1">单片机在通过ISP下载程序的时候一般我们只关注四根线，VCC、GND、RXD、TXD。最近在画一个ESP32的最小系统时发现很多开发板的USB-&gt;TTL电路却使用到了串口芯片的RTS、DTR管脚。  似乎有那么一丢丢眼熟，没错，原子的一键下载电路也长这个样  战舰V3一键下载电路 通过串口的RTS# DTR#管脚控制MCU的RST和BOOT0实现一键下载。上位机控制DTR#输出高电平，RTS#输出低电平，三极管均导通，通过三极管的反向作用，4148导通，RESET被拉低，系统复位，而BOOT0被拉高。一定延时后再将DTR#输出低电平，系统启动，此时因为BOOT0拉高所以程序进入ISP模式。需要注意的是这两个管脚与FlyMcu上设置的电平完全相反。 再回到51单片机，下载程序的软件无非两个，STC-ISP和普中的下载软件。STC-ISP下载异常的稳定，但是每次都需要冷启动。而普中的却不需要，翻阅下普中开发板设计  普中HC6800下载电路 这两个管脚控制Q1，再通过Q1控制MOS管导通与否实现对板子电源的控制。emmm，，，问题出在这个MOS管经常炸管，，， </div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">HelsingenMersken</div><div class="author-info-description">嵌入式工程师，记录嵌入式与折腾日常。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/HelsingenMersken"><i class="fab fa-github"></i><span>关注 GitHub</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/HelsingenMersken" target="_blank" title="GitHub"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#zerotier%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">zerotier安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E5%86%8C%E8%B4%A6%E5%8F%B7"><span class="toc-number">1.1.</span> <span class="toc-text">注册账号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.</span> <span class="toc-text">客户端安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows"><span class="toc-number">1.2.1.</span> <span class="toc-text">Windows</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux"><span class="toc-number">1.2.2.</span> <span class="toc-text">Linux</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%A0%91%E8%8E%93%E6%B4%BE%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BD%AC%E5%8F%91%E5%92%8C%E8%B7%AF%E7%94%B1%E6%8E%A7%E5%88%B6"><span class="toc-number">2.</span> <span class="toc-text">配置树莓派的数据转发和路由控制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8BIP%E8%BD%AC%E5%8F%91%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.1.</span> <span class="toc-text">查看IP转发设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%93%E5%BC%80%E5%86%85%E6%A0%B8IP%E8%BD%AC%E5%8F%91"><span class="toc-number">2.2.</span> <span class="toc-text">打开内核IP转发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%BD%91%E5%8D%A1%E7%8A%B6%E6%80%81"><span class="toc-number">2.3.</span> <span class="toc-text">查看网卡状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-iptables-%E5%90%AF%E7%94%A8-eth0-%E7%9A%84%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2%E5%92%8C-IP-%E4%BC%AA%E8%A3%85"><span class="toc-number">2.4.</span> <span class="toc-text">使用 iptables 启用 eth0 的网络地址转换和 IP 伪装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-iptables-%E9%85%8D%E7%BD%AE%E5%AD%98%E5%82%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">2.5.</span> <span class="toc-text">安装 iptables 配置存储工具</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E8%AE%BE%E7%BD%AE"><span class="toc-number">3.</span> <span class="toc-text">路由设置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%88%E6%9D%83"><span class="toc-number">3.1.</span> <span class="toc-text">授权</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E8%B7%AF%E7%94%B1"><span class="toc-number">3.2.</span> <span class="toc-text">设置路由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BE%E7%BD%AE"><span class="toc-number">3.3.</span> <span class="toc-text">客户端设置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows-1"><span class="toc-number">3.3.1.</span> <span class="toc-text">Windows</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Android"><span class="toc-number">3.3.2.</span> <span class="toc-text">Android</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-number">4.</span> <span class="toc-text">参考链接</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/10/13/%E5%91%8A%E5%88%ABVM%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%8C%E4%BD%BF%E7%94%A8WSL%E5%AE%89%E8%A3%85%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%99%A8/" title="告别VM虚拟机，使用WSL安装交叉编译器">告别VM虚拟机，使用WSL安装交叉编译器</a><time datetime="2021-10-13T00:44:01.000Z" title="发表于 2021-10-13 08:44:01">2021-10-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/09/30/Makefile/" title="Makefile">Makefile</a><time datetime="2021-09-30T10:21:15.000Z" title="发表于 2021-09-30 18:21:15">2021-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/09/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8B%E5%B2%97%E5%86%8D%E5%B0%B1%E4%B8%9A-ZeroTier%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" title="树莓派下岗再就业-ZeroTier内网穿透">树莓派下岗再就业-ZeroTier内网穿透</a><time datetime="2021-09-22T12:00:00.000Z" title="发表于 2021-09-22 20:00:00">2021-09-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/01/21/rts%E3%80%81dtr%E4%B8%8E%E4%B8%80%E9%94%AE%E4%B8%8B%E8%BD%BD%E7%94%B5%E8%B7%AF/" title="RTS、DTR与一键下载电路">RTS、DTR与一键下载电路</a><time datetime="2021-01-21T13:27:14.000Z" title="发表于 2021-01-21 21:27:14">2021-01-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/01/21/%E7%BB%99%E6%A0%91%E8%8E%93%E6%B4%BE%E6%B7%BB%E5%8A%A0%E7%89%A9%E7%90%86%E5%BC%80%E5%85%B3%E6%9C%BA%E6%8C%89%E9%94%AE/" title="给树莓派添加物理开关机按键">给树莓派添加物理开关机按键</a><time datetime="2021-01-21T11:24:57.000Z" title="发表于 2021-01-21 19:24:57">2021-01-21</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By HelsingenMersken</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.7.0</a></span></div><div class="footer_custom_text"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">皖ICP备2021007860号-2</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.7.0"></script><script src="/js/main.js?v=5.7.0"></script><div class="js-pjax"></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.7.0"></script></div></div></body></html>

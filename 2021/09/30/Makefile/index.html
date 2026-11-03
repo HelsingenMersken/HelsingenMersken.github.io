@@ -1,124 +1,239 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  
-  <title>Makefile | Welcome To HelsingenMersken</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="基本格式123目标...:依赖...    命令    ... 注意为Tab，不得出现空格 变量系统变量$(变量名) 自定义变量 &#x3D; 延迟变量(不调用不改变) :&#x3D; 立即赋值 ?&#x3D; 空赋值 +&#x3D; 追加赋值自动化变量 $&lt; 第一个依赖文件 $^ 全部的依赖文件，若目标中有重复文件将只保留一份 $@ 目标的集合 $% 当目标为函数库的时候表示规则中的目标成员名。若目标不是函数库文件则值为空 $?">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Makefile | Welcome To HelsingenMersken</title><meta name="author" content="HelsingenMersken"><meta name="copyright" content="HelsingenMersken"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="基本格式123目标...:依赖...    命令    ... 注意为Tab，不得出现空格 变量系统变量$(变量名) 自定义变量 &#x3D; 延迟变量(不调用不改变) :&#x3D; 立即赋值 ?&#x3D; 空赋值 +&#x3D; 追加赋值  自动化变量 $&lt; 第一个依赖文件 $^ 全部的依赖文件，若目标中有重复文件将只保留一份 $@ 目标的集合 $% 当目标为函数库的时候表示规则中的目">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Makefile">
 <meta property="og:url" content="http://blog.arbalest.space/2021/09/30/Makefile/index.html">
 <meta property="og:site_name" content="Welcome To HelsingenMersken">
-<meta property="og:description" content="基本格式123目标...:依赖...    命令    ... 注意为Tab，不得出现空格 变量系统变量$(变量名) 自定义变量 &#x3D; 延迟变量(不调用不改变) :&#x3D; 立即赋值 ?&#x3D; 空赋值 +&#x3D; 追加赋值自动化变量 $&lt; 第一个依赖文件 $^ 全部的依赖文件，若目标中有重复文件将只保留一份 $@ 目标的集合 $% 当目标为函数库的时候表示规则中的目标成员名。若目标不是函数库文件则值为空 $?">
-<meta property="og:locale">
+<meta property="og:description" content="基本格式123目标...:依赖...    命令    ... 注意为Tab，不得出现空格 变量系统变量$(变量名) 自定义变量 &#x3D; 延迟变量(不调用不改变) :&#x3D; 立即赋值 ?&#x3D; 空赋值 +&#x3D; 追加赋值  自动化变量 $&lt; 第一个依赖文件 $^ 全部的依赖文件，若目标中有重复文件将只保留一份 $@ 目标的集合 $% 当目标为函数库的时候表示规则中的目">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.arbalest.space/img/butterfly-icon.png">
 <meta property="article:published_time" content="2021-09-30T10:21:15.000Z">
 <meta property="article:modified_time" content="2021-10-08T13:57:06.000Z">
 <meta property="article:author" content="HelsingenMersken">
 <meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Welcome To HelsingenMersken" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
-
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
-  
-    
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
-
-  
-<meta name="generator" content="Hexo 5.4.0"></head>
-
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Welcome To HelsingenMersken</a>
-      </h1>
+<meta name="twitter:image" content="http://blog.arbalest.space/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Makefile",
+  "url": "http://blog.arbalest.space/2021/09/30/Makefile/",
+  "image": "http://blog.arbalest.space/img/butterfly-icon.png",
+  "datePublished": "2021-09-30T10:21:15.000Z",
+  "dateModified": "2021-10-08T13:57:06.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "HelsingenMersken",
+      "url": "http://blog.arbalest.space"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://blog.arbalest.space/2021/09/30/Makefile/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css?v=5.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css"><script>
+    (() => {
       
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Suche"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.arbalest.space"></form>
-      </div>
-    </div>
-  </div>
-</header>
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
 
-      <div class="outer">
-        <section id="main"><article id="post-Makefile" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2021/09/30/Makefile/" class="article-date">
-  <time class="dt-published" datetime="2021-09-30T10:21:15.000Z" itemprop="datePublished">2021-09-30</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="p-name article-title" itemprop="headline name">
-      Makefile
-    </h1>
-  
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
 
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
       
-        <h1 id="基本格式"><a href="#基本格式" class="headerlink" title="基本格式"></a>基本格式</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">目标...:依赖...</span><br><span class="line">    命令</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Makefile',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about_me/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Welcome To HelsingenMersken</span></a><a class="nav-page-title" href="/"><span class="site-name">Makefile</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about_me/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Makefile</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-09-30T10:21:15.000Z" title="发表于 2021-09-30 18:21:15">2021-09-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-10-08T13:57:06.000Z" title="更新于 2021-10-08 21:57:06">2021-10-08</time></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="基本格式"><a href="#基本格式" class="headerlink" title="基本格式"></a>基本格式</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">目标...:依赖...</span><br><span class="line">    命令</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
 <p><strong>注意为Tab，不得出现空格</strong></p>
 <h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><h2 id="系统变量"><a href="#系统变量" class="headerlink" title="系统变量"></a>系统变量</h2><p>$(变量名)</p>
 <h2 id="自定义变量"><a href="#自定义变量" class="headerlink" title="自定义变量"></a>自定义变量</h2><ul>
-<li>= 延迟变量(不调用不改变)</li>
-<li>:= 立即赋值</li>
-<li>?= 空赋值</li>
-<li>+= 追加赋值<h2 id="自动化变量"><a href="#自动化变量" class="headerlink" title="自动化变量"></a>自动化变量</h2></li>
+<li>&#x3D; 延迟变量(不调用不改变)</li>
+<li>:&#x3D; 立即赋值</li>
+<li>?&#x3D; 空赋值</li>
+<li>+&#x3D; 追加赋值</li>
+</ul>
+<h2 id="自动化变量"><a href="#自动化变量" class="headerlink" title="自动化变量"></a>自动化变量</h2><ul>
 <li>$&lt; 第一个依赖文件</li>
 <li>$^ 全部的依赖文件，若目标中有重复文件将只保留一份</li>
 <li>$@ 目标的集合</li>
 <li>$% 当目标为函数库的时候表示规则中的目标成员名。若目标不是函数库文件则值为空</li>
 <li>$? 所有比目标新的依赖目标集合，以空格隔开</li>
 <li>$* 表示目标模式中”%”及其以前的部分</li>
-<li>$+ $^类似但不主动除去<h1 id="伪目标"><a href="#伪目标" class="headerlink" title="伪目标"></a>伪目标</h1>仅执行命令的目标与目录下存在的文件名冲突时，例如clean<br>声明方式：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.PHONY:clean</span><br></pre></td></tr></table></figure>
-<h1 id="模式规则"><a href="#模式规则" class="headerlink" title="模式规则"></a>模式规则</h1>% 长度任意的非空字符串，当”%”出现在目标时，目标中的”%”决定依赖中的”%”值<h1 id="条件分支"><a href="#条件分支" class="headerlink" title="条件分支"></a>条件分支</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ifeq (var1,var2)</span><br><span class="line">...</span><br><span class="line">else</span><br><span class="line">...</span><br><span class="line">endif</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<li>$+ $^类似但不主动除去</li>
+</ul>
+<h1 id="伪目标"><a href="#伪目标" class="headerlink" title="伪目标"></a>伪目标</h1><p>仅执行命令的目标与目录下存在的文件名冲突时，例如clean<br>声明方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.PHONY:clean</span><br></pre></td></tr></table></figure>
+<h1 id="模式规则"><a href="#模式规则" class="headerlink" title="模式规则"></a>模式规则</h1><p>% 长度任意的非空字符串，当”%”出现在目标时，目标中的”%”决定依赖中的”%”值</p>
+<h1 id="条件分支"><a href="#条件分支" class="headerlink" title="条件分支"></a>条件分支</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ifeq (var1,var2)</span><br><span class="line">...</span><br><span class="line">else</span><br><span class="line">...</span><br><span class="line">endif</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ifneq (var1,var2)</span><br><span class="line">...</span><br><span class="line">else</span><br><span class="line">...</span><br><span class="line">endif</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><h2 id="模式替换函数patsubst"><a href="#模式替换函数patsubst" class="headerlink" title="模式替换函数patsubst"></a>模式替换函数patsubst</h2>$(patsubst %.c,%.o,x.c.c bar.c) 将“x.c.c bar.c”中以“.c”结尾的单词替换成“.o”<h2 id="取文件名函数notdir"><a href="#取文件名函数notdir" class="headerlink" title="取文件名函数notdir"></a>取文件名函数notdir</h2>$(notdir src/foo.c hacks)取出路径中非目录的部分<h2 id="wildcard-获取匹配模式文件名函数"><a href="#wildcard-获取匹配模式文件名函数" class="headerlink" title="wildcard 获取匹配模式文件名函数"></a>wildcard 获取匹配模式文件名函数</h2>$(wildcard *.c)返回当前目录下所有“.c”源文件列表<h2 id="foreach循环函数"><a href="#foreach循环函数" class="headerlink" title="foreach循环函数"></a>foreach循环函数</h2>$(foreach VAR,LIST,TEXT)LIST中以空格间隔的单词逐个赋值给VAR进行TEXT中的运算<div style="display:none">
+<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><h2 id="模式替换函数patsubst"><a href="#模式替换函数patsubst" class="headerlink" title="模式替换函数patsubst"></a>模式替换函数patsubst</h2><p>$(patsubst %.c,%.o,x.c.c bar.c) 将“x.c.c bar.c”中以“.c”结尾的单词替换成“.o”</p>
+<h2 id="取文件名函数notdir"><a href="#取文件名函数notdir" class="headerlink" title="取文件名函数notdir"></a>取文件名函数notdir</h2><p>$(notdir src&#x2F;foo.c hacks)取出路径中非目录的部分</p>
+<h2 id="wildcard-获取匹配模式文件名函数"><a href="#wildcard-获取匹配模式文件名函数" class="headerlink" title="wildcard 获取匹配模式文件名函数"></a>wildcard 获取匹配模式文件名函数</h2><p>$(wildcard *.c)返回当前目录下所有“.c”源文件列表</p>
+<h2 id="foreach循环函数"><a href="#foreach循环函数" class="headerlink" title="foreach循环函数"></a>foreach循环函数</h2><p>$(foreach VAR,LIST,TEXT)LIST中以空格间隔的单词逐个赋值给VAR进行TEXT中的运算</p>
+<div style="display:none">
 # 头文件依赖
 # 文件描述符和打开模式
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">int fd;</span><br><span class="line">fd = open(filename,flags,mode);</span><br><span class="line">lseek(fd,offset,whence);</span><br><span class="line">write(fd,buf,write_len);</span><br><span class="line">read(fd,buf,read_len);</span><br><span class="line">close(fd);</span><br></pre></td></tr></table></figure>
 ## 文件描述符
-特殊的索引</li>
-</ul>
+特殊的索引
+
 <h2 id="文件打开模式"><a href="#文件打开模式" class="headerlink" title="文件打开模式"></a>文件打开模式</h2><p>主模式</p>
 <ul>
 <li>O_RDONLY:只读模式</li>
@@ -128,149 +243,14 @@
 <li>O_APPEND:追加模式</li>
 <li>O_DIRECT:直接IO模式</li>
 <li>O_SYNC:同步模式</li>
-<li>O_NOBLOCK:非阻塞模式<h1 id="系统IO编程"><a href="#系统IO编程" class="headerlink" title="系统IO编程"></a>系统IO编程</h1></li>
+<li>O_NOBLOCK:非阻塞模式</li>
+</ul>
+<h1 id="系统IO编程"><a href="#系统IO编程" class="headerlink" title="系统IO编程"></a>系统IO编程</h1><ul>
 <li>open</li>
 <li>write</li>
 <li>read</li>
 <li>lseek</li>
-<li>close<h1 id="标准IO编程"><a href="#标准IO编程" class="headerlink" title="标准IO编程"></a>标准IO编程</h1></div></li>
+<li>close</li>
 </ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.arbalest.space/2021/09/30/Makefile/" data-id="cl6npf1f40005h4t9c4u5d96o" data-title="Makefile" class="article-share-link">Teilen</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2021/10/13/%E5%91%8A%E5%88%ABVM%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%8C%E4%BD%BF%E7%94%A8WSL%E5%AE%89%E8%A3%85%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%99%A8/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Neuer</strong>
-      <div class="article-nav-title">
-        
-          告别VM虚拟机，使用WSL安装交叉编译器
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2021/09/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8B%E5%B2%97%E5%86%8D%E5%B0%B1%E4%B8%9A-ZeroTier%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Älter</strong>
-      <div class="article-nav-title">树莓派下岗再就业-ZeroTier内网穿透</div>
-    </a>
-  
-</nav>
-
-  
-</article>
-
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/New-World/">New World</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/raspberry/">raspberry</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/stm32/">stm32</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%B6%E5%AE%83%E5%8D%95%E7%89%87%E6%9C%BA/">其它单片机</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">踩坑记录</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">September 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2021/12/31/2021%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/">2021年终总结</a>
-          </li>
-        
-          <li>
-            <a href="/2021/10/13/%E5%91%8A%E5%88%ABVM%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%8C%E4%BD%BF%E7%94%A8WSL%E5%AE%89%E8%A3%85%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%99%A8/">告别VM虚拟机，使用WSL安装交叉编译器</a>
-          </li>
-        
-          <li>
-            <a href="/2021/09/30/Makefile/">Makefile</a>
-          </li>
-        
-          <li>
-            <a href="/2021/09/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8B%E5%B2%97%E5%86%8D%E5%B0%B1%E4%B8%9A-ZeroTier%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/">树莓派下岗再就业-ZeroTier内网穿透</a>
-          </li>
-        
-          <li>
-            <a href="/2021/01/21/rts%E3%80%81dtr%E4%B8%8E%E4%B8%80%E9%94%AE%E4%B8%8B%E8%BD%BD%E7%94%B5%E8%B7%AF/">RTS、DTR与一键下载电路</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-      &copy; 2022 HelsingenMersken<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-
-<script src="/js/jquery-3.4.1.min.js"></script>
-
-
-
-  
-<script src="/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-
-  </div>
-</body>
-</html>
+<h1 id="标准IO编程"><a href="#标准IO编程" class="headerlink" title="标准IO编程"></a>标准IO编程</h1></div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.arbalest.space">HelsingenMersken</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.arbalest.space/2021/09/30/Makefile/">http://blog.arbalest.space/2021/09/30/Makefile/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.arbalest.space" target="_blank">Welcome To HelsingenMersken</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2021/10/13/%E5%91%8A%E5%88%ABVM%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%8C%E4%BD%BF%E7%94%A8WSL%E5%AE%89%E8%A3%85%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%99%A8/" title="告别VM虚拟机，使用WSL安装交叉编译器"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">告别VM虚拟机，使用WSL安装交叉编译器</div></div><div class="info-2"><div class="info-item-1">学习嵌入式Linux的首先是开发环境安装，在Linux平台上使用交叉编译器编译，但是VM虚拟机体积大，使用起来用户体验很不好，尤其是电脑内存捉急的。有没有可以替代的方法呢？答案是可以使用WSL什么是WSL？适用于 Linux 的 Windows 子系统可让开发人员按原样运行 GNU&#x2F;Linux 环境 - 包括大多数命令行工具、实用工具和应用程序 - 且不会产生传统虚拟机或双启动设置开销。 WSL1和WSL2区别首先从官方的比较中可以看出除了跨操作系统文件系统的性能外，WSL 2 体系结构在多个方面都比 WSL 1 更具优势。但是假如需要使用的串口或者跨操作系统文件系统的话只能选择WSL1，笔者在这里只用到了wsl进行行编译，其他操作全部windows下解决，所以选择WSL2 安装WSL首先需要在电脑BIOS中打开VT具体步骤请按电脑品牌百度 自动安装步骤powershell输入以下命令(WIN+X) 1wsl --install 此命令将下载最新的 Linux 内核，将 WSL 2 设置为默认值，并安装 Linux 发行版。步骤简单但是默认安装在C盘，虽然只有几百兆，但...</div></div></div></a><a class="pagination-related" href="/2021/09/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8B%E5%B2%97%E5%86%8D%E5%B0%B1%E4%B8%9A-ZeroTier%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" title="树莓派下岗再就业-ZeroTier内网穿透"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">树莓派下岗再就业-ZeroTier内网穿透</div></div><div class="info-2"><div class="info-item-1">需要截图的部分等新图床弄好后再补离校后进不了校园内网，但是万一需要的时候就很麻烦，于是我看向了边上的树莓派 zerotier安装注册账号https://www.zerotier.com/接着新建网络，类型选择PRIVATE 客户端安装Windows下载安装客户端，并右击添加网络，将上一步获得的16位Network ID填入注意复制的时候不要带换行或空格符号 Linux安装 1curl -s https://install.zerotier.com | sudo bash 加入网络 1sudo zerotier-cli join Network ID 配置树莓派的数据转发和路由控制查看IP转发设置0为关闭 12$ sudo sysctl net.ipv4.ip_forwardnet.ipv4.ip_forward = 0 打开内核IP转发1sudo nano /etc/sysctl.conf 将下列语句去掉注释并修改为1 1net.ipv4.ip_forward=1   修改完成后CTRL+O并回车保存，CTRL+X退出接下来激活配置 1sudo sysctl -p 再次查看IP转...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">HelsingenMersken</div><div class="author-info-description">嵌入式工程师，记录嵌入式与折腾日常。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/HelsingenMersken"><i class="fab fa-github"></i><span>关注 GitHub</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/HelsingenMersken" target="_blank" title="GitHub"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">基本格式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%98%E9%87%8F"><span class="toc-number">2.</span> <span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8F"><span class="toc-number">2.1.</span> <span class="toc-text">系统变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F"><span class="toc-number">2.2.</span> <span class="toc-text">自定义变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E5%8F%98%E9%87%8F"><span class="toc-number">2.3.</span> <span class="toc-text">自动化变量</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BC%AA%E7%9B%AE%E6%A0%87"><span class="toc-number">3.</span> <span class="toc-text">伪目标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E8%A7%84%E5%88%99"><span class="toc-number">4.</span> <span class="toc-text">模式规则</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E5%88%86%E6%94%AF"><span class="toc-number">5.</span> <span class="toc-text">条件分支</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%BD%E6%95%B0"><span class="toc-number">6.</span> <span class="toc-text">函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E6%9B%BF%E6%8D%A2%E5%87%BD%E6%95%B0patsubst"><span class="toc-number">6.1.</span> <span class="toc-text">模式替换函数patsubst</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%96%E6%96%87%E4%BB%B6%E5%90%8D%E5%87%BD%E6%95%B0notdir"><span class="toc-number">6.2.</span> <span class="toc-text">取文件名函数notdir</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wildcard-%E8%8E%B7%E5%8F%96%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%BC%8F%E6%96%87%E4%BB%B6%E5%90%8D%E5%87%BD%E6%95%B0"><span class="toc-number">6.3.</span> <span class="toc-text">wildcard 获取匹配模式文件名函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#foreach%E5%BE%AA%E7%8E%AF%E5%87%BD%E6%95%B0"><span class="toc-number">6.4.</span> <span class="toc-text">foreach循环函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E6%A8%A1%E5%BC%8F"><span class="toc-number">6.5.</span> <span class="toc-text">文件打开模式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9FIO%E7%BC%96%E7%A8%8B"><span class="toc-number">7.</span> <span class="toc-text">系统IO编程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%87%E5%87%86IO%E7%BC%96%E7%A8%8B"><span class="toc-number">8.</span> <span class="toc-text">标准IO编程</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/10/13/%E5%91%8A%E5%88%ABVM%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%8C%E4%BD%BF%E7%94%A8WSL%E5%AE%89%E8%A3%85%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%99%A8/" title="告别VM虚拟机，使用WSL安装交叉编译器">告别VM虚拟机，使用WSL安装交叉编译器</a><time datetime="2021-10-13T00:44:01.000Z" title="发表于 2021-10-13 08:44:01">2021-10-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/09/30/Makefile/" title="Makefile">Makefile</a><time datetime="2021-09-30T10:21:15.000Z" title="发表于 2021-09-30 18:21:15">2021-09-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/09/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8B%E5%B2%97%E5%86%8D%E5%B0%B1%E4%B8%9A-ZeroTier%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" title="树莓派下岗再就业-ZeroTier内网穿透">树莓派下岗再就业-ZeroTier内网穿透</a><time datetime="2021-09-22T12:00:00.000Z" title="发表于 2021-09-22 20:00:00">2021-09-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/01/21/rts%E3%80%81dtr%E4%B8%8E%E4%B8%80%E9%94%AE%E4%B8%8B%E8%BD%BD%E7%94%B5%E8%B7%AF/" title="RTS、DTR与一键下载电路">RTS、DTR与一键下载电路</a><time datetime="2021-01-21T13:27:14.000Z" title="发表于 2021-01-21 21:27:14">2021-01-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/01/21/%E7%BB%99%E6%A0%91%E8%8E%93%E6%B4%BE%E6%B7%BB%E5%8A%A0%E7%89%A9%E7%90%86%E5%BC%80%E5%85%B3%E6%9C%BA%E6%8C%89%E9%94%AE/" title="给树莓派添加物理开关机按键">给树莓派添加物理开关机按键</a><time datetime="2021-01-21T11:24:57.000Z" title="发表于 2021-01-21 19:24:57">2021-01-21</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By HelsingenMersken</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.7.0</a></span></div><div class="footer_custom_text"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">皖ICP备2021007860号-2</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.7.0"></script><script src="/js/main.js?v=5.7.0"></script><div class="js-pjax"></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.7.0"></script></div></div></body></html>
