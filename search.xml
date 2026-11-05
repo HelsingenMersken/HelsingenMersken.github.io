@@ -794,4 +794,95 @@ sudo chomd 777 /var/www/html
         <category>New World</category>
       </categories>
   </entry>
+  <entry>
+    <title>各类设备抓取HCI日志方式</title>
+    <url>/2026/11/05/%E5%90%84%E7%B1%BB%E8%AE%BE%E5%A4%87%E6%8A%93%E5%8F%96HCI%E6%97%A5%E5%BF%97%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[Android阵营小米
+拨号盘输入一次 ##5959## 弹窗，点击同意开始抓蓝牙日志
+
+重启蓝牙（系统设置里），复现问题
+
+拨打电话界面的拨号盘，继续输入一次 ##5959##，点击同意保存日志
+
+
+华为注意因手头无设备，该教程只在老鸿蒙系统上验证过，未在纯血鸿蒙上测试验证，纯血鸿蒙请自行验证
+
+蓝牙HCI日志获取：设置-》系统和更新-》开发人员选项-》开启蓝牙HCI信息收集日志，复现问题，下载日志：
+
+使用ADB拉取日志文件 
+adb file recv /data/log/bt/ ./bt
+
+三星手表注意市场上流通的非工程机不支持USB连接，需要使用无线ADB连接
+
+设置-&gt;关于手表-&gt;软件信息-&gt;”软件版本“连续点五次，启用“开发者选项”
+
+设置-&gt;开发者选项-&gt;打开“蓝牙窥探记录”开关
+
+复现问题现象（复现前推荐重启下手表）
+
+进入拨号盘界面输入*#9900#
+
+选择“RUN DUMPSTATE&#x2F;LOGCAT”等待完成后再下滑找到 COPY TO SDCARD(测试也可以直接选择最后一个”RUN DUMPSTATE &amp; COPY TO SDCARD”）
+
+adb命令到对应目录下 sdcard&#x2F;log拷贝出来
+
+HCI log 路径：\FS\data\misc\bluetooth\logs
+
+
+三星
+设置-&gt;关于手机-软件信息-“编译编号”连续点七次，启用开发者模式
+
+其他步骤和三星手表一致
+
+HCI log 路径：\FS\data\log\bt
+
+
+苹果配置文件下载链接：配置文件与日志 - 反馈助手 - 苹果开发者
+
+需要开发者账户下载配置文件，没有帐号的这步可以直接告辞了。
+
+文件传入到IOS后打开（不喜欢用微信传文件的推荐用LANdrop），随后在设置-通用-VPN和设备管理-描述和配置文件选择刚才的文件安装。
+
+复现问题后同时按音量+-和电源键，注意部分型号会震动三下，实际测试部分手机没有震动也生成了日志。
+
+之后在设置-&gt;隐私与安全性-&gt;分析与改进-&gt;分析数据可以看到HCI。
+
+
+Windows（BTVS）Microsoft蓝牙测试平台 - 蓝牙虚拟嗅探器 （BTVS） - Windows drivers | Microsoft Learn
+安装蓝牙测试平台包 - BTP - Windows drivers | Microsoft Learn
+默认安装位置：C:\BTP\v1.14.0\x86\btvs.exe
+如果使用Wireshark可以直接在命令提示符或 PowerShell运行
+C:\BTP\v1.14.0\x86\btvs.exe -Mode Wireshark
+
+
+
+如有其他需求参考以下指令说明和BTVS官方说明
+btvs.exe [-Address 127.0.0.1] [-Mode Frontline|Ellisys|Wireshark]  [-Port 24352] [-Remote off|on] [-Service 1|2|3]    Address     (Ellisys mode only) Specifies the IP address of the machine                    running Ellisys Bluetooth Analyzer. (Default: 127.0.0.1)    Mode        Optionally specify whether btvs.exe should generate traces                    for Frontline, Ellisys, or Wireshark.    Port        (Ellisys or Wireshark only) Specifies the UDP listen port of the                    Ellisys Bluetooth Analyzer injection API\Specifies the TCP port                    for Wireshark. (Default: 24352)    Remote      (Wireshark only) Specifies whether Wireshark will be on the same machine                    or run remotely. Off will try to start Wireshark on the same machine. (Default: off)    Service     (Ellisys mode only) Specifies the HCI Injection Service.                    1: Primary. 2: Secondary. 3: Tertiary. (Default: 1)
+
+
+
+用户界面
+蓝牙虚拟嗅探器窗口中有两个按钮：
+
+完整数据包日志记录
+使通常会被丢弃的数据在 HCI 日志中得以收集。 例如，大型 ACL 数据包、敏感数据（包括加密密钥和 HID 报告）。
+
+设置或扩展调试模式
+在有限的时间内，启用 SSP 调试模式。 发送并接受 SMP 调试密钥。 再次单击会延长时间。
+
+
+]]></content>
+      <categories>
+        <category>蓝牙</category>
+      </categories>
+      <tags>
+        <tag>HCI</tag>
+        <tag>Windows</tag>
+        <tag>IOS</tag>
+        <tag>MACOS</tag>
+        <tag>Android</tag>
+        <tag>BLE</tag>
+        <tag>Bluetooth</tag>
+      </tags>
+  </entry>
 </search>
