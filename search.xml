@@ -142,55 +142,92 @@ GPIO配置CC2530共有21个IO，核心板给出了19个（P2_4和P2_3用于接32
       </categories>
   </entry>
   <entry>
-    <title>C语言位移、不同长度赋值操作</title>
-    <url>/2020/10/04/c%E8%AF%AD%E8%A8%80%E4%BD%8D%E7%A7%BB%E3%80%81%E4%B8%8D%E5%90%8C%E9%95%BF%E5%BA%A6%E8%B5%8B%E5%80%BC%E6%93%8D%E4%BD%9C/</url>
-    <content><![CDATA[移位问题向下函数传入0x00800000和0x00400000分别返回什么？
+    <title>HardFault异常定位原理及方法</title>
+    <url>/2026/11/15/HardFault%E5%BC%82%E5%B8%B8%E5%AE%9A%E4%BD%8D%E5%8E%9F%E7%90%86%E5%8F%8A%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[目录什么是HardFault中断HardFault触发后如何回溯异常发生在主栈情况下异常发生在任务栈情况下如何判断发生在主栈还是任务栈以LN882HM为例看如何实现
+什么是HardFault中断在 ARM Cortex-M 系列处理器中，HardFault 是一种用于处理严重错误的系统异常。
+程序运行过程中，如果发生非法内存访问、总线访问错误、非法指令执行、除零等错误，处理器可能产生 MemManage、BusFault 或 UsageFault。当对应异常未启用或无法正常处理时，异常可能升级为 HardFault。
+发生 HardFault 后，可以通过读取异常现场保存的 PC、LR、xPSR 等寄存器，以及 SCB 中的故障状态寄存器，定位异常发生的位置并分析故障原因。
+HardFault触发后如何回溯这里有两种情况，第一种在RTOS的任务中触发也有可能在调度器或者硬件中断执行时发生。
+异常发生在主栈情况下主栈情况下比较简单因为没有切换栈，直接从栈里面倒着推就好了
+异常发生在任务栈情况下
+发生异常后内核自动完成部分寄存器（R0、R1、R2、R3、R12、LR、PC、xPSR）压栈到PSP，再切换到MSP执行HardFault中断函数。
 
-这还用想，当然返回原值了。然而实际却是返回了0xff800000和0x00400000
-为什么0x00800000会返回0xff800000，而0x00400000返回了原值？
-先看程序运行过程，首先temp先左移了八位，变成0x80000000，这是没有问题的，再右移八位后却变成了0xff800000。这是因为c语言对无符号类型数据的移位均为空位补零，但是对于有符号类型的右移却根据最高位决定，最高位为1则补1，反之则补零，所以0x00800000变换为0xff800000，而0x00400000返回原数值，但将数据类型改为无符号时则无此规律。
-不同类型赋值问题已知cannle为u32，p_Temp为s32 分析下列赋值过程
+在中断函数中R0、R1、R2、R3、R12、LR、PC、xPSR已经变为中断函数的相关数据而不是任务现场了，所以在这里需要进行任务回溯。
 
-首先u32和s32长度等长，区别在于最高位是否有符号位，这种赋值二进制数值不变，但是在打印时候按不同类型解析。
-其次，将长值赋值给短值，截取低位，然后再赋给短值（即丢弃长值中高于短值最高位的所有值）
-其实上述过程只是将int 32类型拆分开存储。发送给上位机后，上位机可将其视为一个int32数据。
-赋值类型补充
-
-
-整数与整数之间
+读取PSP指针位置获取到最近一次执行的任务栈，此时任务栈中保存的数据即为异常中断进入前R0、R1、R2、R3、R12、LR、PC、xPSR，这里将数据打印出来，特别是PC指针，再根据elf文件获取到当时任务的执行函数和具体行数。
 
 
+如何判断发生在主栈还是任务栈这里插个关于内核方面的知识，在ARM-Cortex内核中可以通过LR寄存器的bit2来判断发生来源
+
+以LN882HM为例看如何实现亮牛封装的比较好，所以这里以亮牛代码为例
+__asm void fault_handler(void)&#123;    #ifdef CFG_USING_CM_BACKTRACE    IMPORT  cm_backtrace_fault    #endif     MOV    R0, LR    MOV    R1, SP    #ifdef CFG_USING_CM_BACKTRACE    BL     __cpp(cm_backtrace_fault)    #endif    B      .&#125;
 
 
-短值赋给长值
-短整数直接高位补0
+这里把LR拷到R0，SP拷到R1，调用C函数用于传参，我们来看cm_backtrace_fault实现
+
+void cm_backtrace_fault(uint32_t fault_handler_lr, uint32_t fault_handler_sp) &#123;    uint32_t stack_pointer = fault_handler_sp, saved_regs_addr = stack_pointer, tcb_stack_pointer = 0;    const char *regs_name[] = &#123; &quot;R0 &quot;, &quot;R1 &quot;, &quot;R2 &quot;, &quot;R3 &quot;, &quot;R12&quot;, &quot;LR &quot;, &quot;PC &quot;, &quot;PSR&quot; &#125;;#ifdef CMB_USING_DUMP_STACK_INFO    uint32_t stack_start_addr = main_stack_start_addr;    size_t stack_size = main_stack_size;#endif    CMB_ASSERT(init_ok);    /* only call once */    CMB_ASSERT(!on_fault);    on_fault = true;    cmb_println(&quot;&quot;);    cm_backtrace_firmware_info();
 
 
-两个无符号数据
-短整数符号拓展
+前面主要一些初始化判断还有打印固件信息没啥好说的
+
+#ifdef CMB_USING_OS_PLATFORM    on_thread_before_fault = fault_handler_lr &amp; (1UL &lt;&lt; 2);    /* check which stack was used before (MSP or PSP) */    if (on_thread_before_fault) &#123;        cmb_println(print_info[PRINT_FAULT_ON_THREAD], get_cur_thread_name() != NULL ? get_cur_thread_name() : &quot;NO_NAME&quot;);        saved_regs_addr = stack_pointer = cmb_get_psp();#ifdef CMB_USING_DUMP_STACK_INFO        get_cur_thread_stack_info(&amp;tcb_stack_pointer, &amp;stack_start_addr, &amp;stack_size);#endif /* CMB_USING_DUMP_STACK_INFO */    &#125; else &#123;        cmb_println(print_info[PRINT_FAULT_ON_HANDLER]);    &#125;#else    /* bare metal(no OS) environment */    cmb_println(print_info[PRINT_FAULT_ON_HANDLER]);#endif /* CMB_USING_OS_PLATFORM */
 
 
-两个有符号类型
+这里通过LR寄存器，bit2判断发生中断前是PSP还是MSP，并且获取到对应栈顶指针
+
+/* delete saved R0~R3, R12, LR,PC,xPSR registers space */stack_pointer += sizeof(size_t) * 8;
 
 
+跳过异常栈帧也就是内核自动保存的R0~R3, R12, LR,PC,xPSR八个寄存器（ARM栈向下生长，所以加8*4字节）
 
-一个有符号，一个无符号
-短整数先进行位数拓展，过程保持数为不变，然后按长整数的数据类型解析数据
+#if (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M7) || \    (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M33)    stack_pointer = statck_del_fpu_regs(fault_handler_lr, stack_pointer);#endif /* (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M7) */
 
 
-整数与浮点数之间浮点数转整型
-截取整数部分
-整型转浮点型
-小数部分为零，整数部分不变
-double &amp; float
-double-&gt;float
-丢失数据精度
-float-&gt;double
-不丢失精度
+判断是否使用FPU扩展异常栈帧，如果有则跳过
+
+#ifdef CMB_USING_DUMP_STACK_INFO    /* check stack overflow */    if (stack_pointer &lt; stack_start_addr || stack_pointer &gt; stack_start_addr + stack_size) &#123;        cmb_println(&quot;stack_pointer: 0x%08x, stack_start_addr: 0x%08x, stack_end_addr: 0x%08x&quot;, stack_pointer, stack_start_addr,            stack_start_addr + stack_size);        stack_is_overflow = true;#if (CMB_OS_PLATFORM_TYPE == CMB_OS_PLATFORM_RTT)        if (on_thread_before_fault) &#123;             /* change the stack start adder to TCB-&gt;sp when stack is overflow  */            stack_pointer = tcb_stack_pointer;        &#125;#endif    &#125;
+
+
+紧接着栈溢出检测
+
+ /* dump stack information */    dump_stack(stack_start_addr, stack_size, (uint32_t *) stack_pointer);#endif /* CMB_USING_DUMP_STACK_INFO */    &#123;        /* dump register */        cmb_println(print_info[PRINT_REGS_TITLE]);        regs.saved.r0        = ((uint32_t *)saved_regs_addr)[0];  // Register R0        regs.saved.r1        = ((uint32_t *)saved_regs_addr)[1];  // Register R1        regs.saved.r2        = ((uint32_t *)saved_regs_addr)[2];  // Register R2        regs.saved.r3        = ((uint32_t *)saved_regs_addr)[3];  // Register R3        regs.saved.r12       = ((uint32_t *)saved_regs_addr)[4];  // Register R12        regs.saved.lr        = ((uint32_t *)saved_regs_addr)[5];  // Link register LR        regs.saved.pc        = ((uint32_t *)saved_regs_addr)[6];  // Program counter PC        regs.saved.psr.value = ((uint32_t *)saved_regs_addr)[7];  // Program status word PSR        cmb_println(&quot;  %s: %08x  %s: %08x  %s: %08x  %s: %08x&quot;, regs_name[0], regs.saved.r0,                                                                regs_name[1], regs.saved.r1,                                                                regs_name[2], regs.saved.r2,                                                                regs_name[3], regs.saved.r3);        cmb_println(&quot;  %s: %08x  %s: %08x  %s: %08x  %s: %08x&quot;, regs_name[4], regs.saved.r12,                                                                regs_name[5], regs.saved.lr,                                                                regs_name[6], regs.saved.pc,                                                                regs_name[7], regs.saved.psr.value);        cmb_println(&quot;==============================================================&quot;);    &#125;
+
+7.将栈数据打印出来，包括出错现场
+    /* the Cortex-M0 is not support fault diagnosis */#if (CMB_CPU_PLATFORM_TYPE != CMB_CPU_ARM_CORTEX_M0)    regs.syshndctrl.value = CMB_SYSHND_CTRL;  // System Handler Control and State Register    regs.mfsr.value       = CMB_NVIC_MFSR;    // Memory Fault Status Register    regs.mmar             = CMB_NVIC_MMAR;    // Memory Management Fault Address Register    regs.bfsr.value       = CMB_NVIC_BFSR;    // Bus Fault Status Register    regs.bfar             = CMB_NVIC_BFAR;    // Bus Fault Manage Address Register    regs.ufsr.value       = CMB_NVIC_UFSR;    // Usage Fault Status Register    regs.hfsr.value       = CMB_NVIC_HFSR;    // Hard Fault Status Register    regs.dfsr.value       = CMB_NVIC_DFSR;    // Debug Fault Status Register    regs.afsr             = CMB_NVIC_AFSR;    // Auxiliary Fault Status Register    fault_diagnosis();#endif
+
+
+通过 Cortex-M4 的 SCB（System Control Block，系统控制块） 辅助判断异常原因
+
+static void print_call_stack(uint32_t sp) &#123;    size_t i, cur_depth = 0;    uint32_t call_stack_buf[CMB_CALL_STACK_MAX_DEPTH] = &#123;0&#125;;    cur_depth = cm_backtrace_call_stack(call_stack_buf, CMB_CALL_STACK_MAX_DEPTH, sp);    for (i = 0; i &lt; cur_depth; i++) &#123;        sprintf(call_stack_info + i * (8 + 1), &quot;%08lx&quot;, (unsigned long)call_stack_buf[i]);        call_stack_info[i * (8 + 1) + 8] = &#x27; &#x27;;    &#125;    if (cur_depth) &#123;        cmb_println(print_info[PRINT_CALL_STACK_INFO], fw_name, CMB_ELF_FILE_EXTENSION_NAME, cur_depth * (8 + 1),                call_stack_info);    &#125; else &#123;        cmb_println(print_info[PRINT_CALL_STACK_ERR]);    &#125;&#125;
+
+size_t cm_backtrace_call_stack(uint32_t *buffer, size_t size, uint32_t sp) &#123;    uint32_t stack_start_addr = main_stack_start_addr, pc;#ifdef CMB_USING_OS_PLATFORM    uint32_t tcb_sp;#endif    size_t depth = 0, stack_size = main_stack_size;    bool regs_saved_lr_is_valid = false;    if (on_fault) &#123;        if (!stack_is_overflow) &#123;            /* first depth is PC */            buffer[depth++] = regs.saved.pc;            /* fix the LR address in thumb mode */            pc = regs.saved.lr - 1;            if ((pc &gt;= code_start_addr) &amp;&amp; (pc &lt;= code_start_addr + code_size) &amp;&amp; (depth &lt; CMB_CALL_STACK_MAX_DEPTH)                    &amp;&amp; (depth &lt; size)) &#123;                buffer[depth++] = pc;                regs_saved_lr_is_valid = true;            &#125;        &#125;#ifdef CMB_USING_OS_PLATFORM        /* program is running on thread before fault */        if (on_thread_before_fault) &#123;            get_cur_thread_stack_info(&amp;tcb_sp, &amp;stack_start_addr, &amp;stack_size);        &#125;    &#125; else &#123;        /* OS environment */        if (cmb_get_sp() == cmb_get_psp()) &#123;            get_cur_thread_stack_info(&amp;tcb_sp, &amp;stack_start_addr, &amp;stack_size);        &#125;#endif /* CMB_USING_OS_PLATFORM */    &#125;    if (stack_is_overflow) &#123;        sp = stack_start_addr;    &#125;    /* copy called function address */    for (; sp &lt; stack_start_addr + stack_size; sp += sizeof(size_t)) &#123;        /* the *sp value may be LR, so need decrease a word to PC */        pc = *((uint32_t *) sp) - sizeof(size_t);        /* the Cortex-M using thumb instruction, so the pc must be an odd number */        if (pc % 2 == 0) &#123;            continue;        &#125;        /* fix the PC address in thumb mode */        pc = *((uint32_t *) sp) - 1;        if ((pc &gt;= code_start_addr + sizeof(size_t)) &amp;&amp; (pc &lt;= code_start_addr + code_size) &amp;&amp; (depth &lt; CMB_CALL_STACK_MAX_DEPTH)                /* check the the instruction before PC address is &#x27;BL&#x27; or &#x27;BLX&#x27; */                &amp;&amp; disassembly_ins_is_bl_blx(pc - sizeof(size_t)) &amp;&amp; (depth &lt; size)) &#123;            /* the second depth function may be already saved, so need ignore repeat */            if ((depth == 2) &amp;&amp; regs_saved_lr_is_valid &amp;&amp; (pc == buffer[1])) &#123;                continue;            &#125;            buffer[depth++] = pc;        &#125;    &#125;    return depth;&#125;
+
+
+采用栈扫描方式推测调用链并打印出来，个人认为这块写的很精妙
+
+
+地址是否符合 Thumb 模式的特征。
+
+地址是否位于程序代码区间内。
+
+地址附近是否存在 BL 或 BLX 函数调用指令。
+
+是否超过调用栈缓冲区容量。
+
+
+if (cur_depth) &#123;    cmb_println(print_info[PRINT_CALL_STACK_INFO], fw_name, CMB_ELF_FILE_EXTENSION_NAME, cur_depth * (8 + 1),            call_stack_info);&#125;
+
+
+通过addr2line指令找到函数入口，例如PC: 08003456 LR: 08001235则命令打印展开后为
+
+addr2line -e firmware.elf -afpiC 0x08003456 0x08001234
 ]]></content>
-      <categories>
-        <category>New World</category>
-      </categories>
+      <tags>
+        <tag>调试</tag>
+        <tag>DeBUG</tag>
+        <tag>FreeRTOS</tag>
+      </tags>
   </entry>
   <entry>
     <title>DS18B20管脚该怎么看？</title>
@@ -213,14 +250,6 @@ float-&gt;double
       </categories>
   </entry>
   <entry>
-    <title>Hello Word!</title>
-    <url>/2020/03/22/hello-word/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>New World</category>
-      </categories>
-  </entry>
-  <entry>
     <title>ESP32配置RMT接收功能</title>
     <url>/2020/07/16/esp32%E9%85%8D%E7%BD%AErmt/</url>
     <content><![CDATA[懒癌晚期，一个月没更了（逃
@@ -239,6 +268,14 @@ float-&gt;double
 打印出来的数据
 看到打印出来的数据后需要自行解析了
 ]]></content>
+      <categories>
+        <category>New World</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Hello Word!</title>
+    <url>/2020/03/22/hello-word/</url>
+    <content><![CDATA[]]></content>
       <categories>
         <category>New World</category>
       </categories>
@@ -321,6 +358,57 @@ Fn+→
       </categories>
   </entry>
   <entry>
+    <title>C语言位移、不同长度赋值操作</title>
+    <url>/2020/10/04/c%E8%AF%AD%E8%A8%80%E4%BD%8D%E7%A7%BB%E3%80%81%E4%B8%8D%E5%90%8C%E9%95%BF%E5%BA%A6%E8%B5%8B%E5%80%BC%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[移位问题向下函数传入0x00800000和0x00400000分别返回什么？
+
+这还用想，当然返回原值了。然而实际却是返回了0xff800000和0x00400000
+为什么0x00800000会返回0xff800000，而0x00400000返回了原值？
+先看程序运行过程，首先temp先左移了八位，变成0x80000000，这是没有问题的，再右移八位后却变成了0xff800000。这是因为c语言对无符号类型数据的移位均为空位补零，但是对于有符号类型的右移却根据最高位决定，最高位为1则补1，反之则补零，所以0x00800000变换为0xff800000，而0x00400000返回原数值，但将数据类型改为无符号时则无此规律。
+不同类型赋值问题已知cannle为u32，p_Temp为s32 分析下列赋值过程
+
+首先u32和s32长度等长，区别在于最高位是否有符号位，这种赋值二进制数值不变，但是在打印时候按不同类型解析。
+其次，将长值赋值给短值，截取低位，然后再赋给短值（即丢弃长值中高于短值最高位的所有值）
+其实上述过程只是将int 32类型拆分开存储。发送给上位机后，上位机可将其视为一个int32数据。
+赋值类型补充
+
+
+整数与整数之间
+
+
+
+
+短值赋给长值
+短整数直接高位补0
+
+
+两个无符号数据
+短整数符号拓展
+
+
+两个有符号类型
+
+
+
+一个有符号，一个无符号
+短整数先进行位数拓展，过程保持数为不变，然后按长整数的数据类型解析数据
+
+
+整数与浮点数之间浮点数转整型
+截取整数部分
+整型转浮点型
+小数部分为零，整数部分不变
+double &amp; float
+double-&gt;float
+丢失数据精度
+float-&gt;double
+不丢失精度
+]]></content>
+      <categories>
+        <category>New World</category>
+      </categories>
+  </entry>
+  <entry>
     <title>MLX90614 红外测温模块使用（待续</title>
     <url>/2020/10/03/mlx90614-%E7%BA%A2%E5%A4%96%E6%B5%8B%E6%B8%A9%E6%A8%A1%E5%9D%97%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[非接触式红外测温模块，贵的一批屌照
@@ -350,6 +438,32 @@ MLX90614DCI对应视野的角度值与灵敏度
 ]]></content>
       <categories>
         <category>New World</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Raspberry PI 3B+CUPS实现共享打印机</title>
+    <url>/2020/12/21/raspberry-pi-3bcups%E5%AE%9E%E7%8E%B0%E5%85%B1%E4%BA%AB%E6%89%93%E5%8D%B0%E6%9C%BA/</url>
+    <content><![CDATA[每次打印东西都要把电脑搬到打印机边上，实在过于麻烦，恰巧手里有块吃灰大半年的树莓派，干脆直接改无线打印机算了
+把打印机通过USB线连接Raspberry PI，然后安装CUPS（一定要换国内源，具体参考开箱配置那一篇）
+sudo apt-get install cups
+系统会自动安装相关依赖和打印机驱动，安装完后将用户加到lpadmin 用户组，然后开启 CUPS 的远程访问权限。
+sudo usermod -a -G lpadmin pisudo cupsctl --remote-any
+
+执行完之后局域网内任何一个设备访问 Raspberry PI 的 631 端口，例如 http://192.168.1.XX:631。接了屏幕的建议直接在 Raspberry PI 上访问。
+按CUPS界面引导配置CUPS：Administration-&gt;Add Printer,记得选中分享打印机，打印机的名字尽量简单（吐槽句，有个教程写成Description ，然后一堆复读机复读了这个错误，，，，），后面可能会用到，配置完后打印测试页试下能不能正常打印
+安装samba来添加Windows环境支持（实际测试Windows下能不能找到完全看缘分，但是Android下可以找到）
+sudo apt-get install samba
+
+接下来到Windows系统里添加打印机，安装samba后运气好能直接找到，但是大概率是没办法直接找到的，选择我需要的打印机不在列表中
+
+然后按下图设置（打印机IP:631&#x2F;printers&#x2F;Name），注意IP地址和在CUPS中设置的打印机名不要设置错，之后一路下一步，正确选择打印机驱动即可。
+
+Android中本人测试为Redmi K20，无法打印图片，但是可以通过先转PDF的方式打印（办法总比困难多嘛
+参考：
+如何正确地用树莓派共享打印机
+]]></content>
+      <categories>
+        <category>raspberry</category>
       </categories>
   </entry>
   <entry>
@@ -391,32 +505,6 @@ proteus仿真时，在找74ls183芯片时发现，芯片预览左上角提示没
       </categories>
   </entry>
   <entry>
-    <title>Raspberry PI 3B+CUPS实现共享打印机</title>
-    <url>/2020/12/21/raspberry-pi-3bcups%E5%AE%9E%E7%8E%B0%E5%85%B1%E4%BA%AB%E6%89%93%E5%8D%B0%E6%9C%BA/</url>
-    <content><![CDATA[每次打印东西都要把电脑搬到打印机边上，实在过于麻烦，恰巧手里有块吃灰大半年的树莓派，干脆直接改无线打印机算了
-把打印机通过USB线连接Raspberry PI，然后安装CUPS（一定要换国内源，具体参考开箱配置那一篇）
-sudo apt-get install cups
-系统会自动安装相关依赖和打印机驱动，安装完后将用户加到lpadmin 用户组，然后开启 CUPS 的远程访问权限。
-sudo usermod -a -G lpadmin pisudo cupsctl --remote-any
-
-执行完之后局域网内任何一个设备访问 Raspberry PI 的 631 端口，例如 http://192.168.1.XX:631。接了屏幕的建议直接在 Raspberry PI 上访问。
-按CUPS界面引导配置CUPS：Administration-&gt;Add Printer,记得选中分享打印机，打印机的名字尽量简单（吐槽句，有个教程写成Description ，然后一堆复读机复读了这个错误，，，，），后面可能会用到，配置完后打印测试页试下能不能正常打印
-安装samba来添加Windows环境支持（实际测试Windows下能不能找到完全看缘分，但是Android下可以找到）
-sudo apt-get install samba
-
-接下来到Windows系统里添加打印机，安装samba后运气好能直接找到，但是大概率是没办法直接找到的，选择我需要的打印机不在列表中
-
-然后按下图设置（打印机IP:631&#x2F;printers&#x2F;Name），注意IP地址和在CUPS中设置的打印机名不要设置错，之后一路下一步，正确选择打印机驱动即可。
-
-Android中本人测试为Redmi K20，无法打印图片，但是可以通过先转PDF的方式打印（办法总比困难多嘛
-参考：
-如何正确地用树莓派共享打印机
-]]></content>
-      <categories>
-        <category>raspberry</category>
-      </categories>
-  </entry>
-  <entry>
     <title>RTS、DTR与一键下载电路</title>
     <url>/2021/01/21/rts%E3%80%81dtr%E4%B8%8E%E4%B8%80%E9%94%AE%E4%B8%8B%E8%BD%BD%E7%94%B5%E8%B7%AF/</url>
     <content><![CDATA[单片机在通过ISP下载程序的时候一般我们只关注四根线，VCC、GND、RXD、TXD。最近在画一个ESP32的最小系统时发现很多开发板的USB-&gt;TTL电路却使用到了串口芯片的RTS、DTR管脚。
@@ -438,18 +526,6 @@ Android中本人测试为Redmi K20，无法打印图片，但是可以通过先�
     <title>stm32连接到阿里云——MQTT协议</title>
     <url>/2020/04/12/stm32%E8%BF%9E%E6%8E%A5%E5%88%B0%E9%98%BF%E9%87%8C%E4%BA%91-mqtt%E5%8D%8F%E8%AE%AE/</url>
     <content><![CDATA[阿里云物联网平台与单片机通信采用MQTT协议（阿里云兼容MQTT3.1和MQTT3.1.0），什么是MQTT协议？MQTT是一种基于发布&#x2F;订阅（publish&#x2F;subscribe）模式的”轻量级”的应用层协议，该协议构建于TCP&#x2F;IP协议上（类似HTTP），所以在MQTT通信之前需要建立TCP连接。 一个数据包包括包头，可变包头和负载三个部分（部分报文没有可变和负载部分，如ping，disconnect）。 包头由固定包头字节和剩余长度组成，其中固定包头字节的高四位表示控制包类型，低四位表示每个MQTT控制包类型的特殊标识，如连接报文（connect）的包头固定字节为0x10。 从第二个字节开始就是数据包长度，指可变包头和负载的长度。注意包长度所占的字节数没有指定，也就是说长度可以占一个字节，两个，甚至更多。那么怎么知道长度到哪结束呢？数据包长度的每个字节最高位代表是否进位，剩下七位才代表长度，如果最高位置一则说明下个字节还是包长度部分，若下一个字节的最高位也为一则下下个字节还是长度……依此类推。其中下个字节所表示的数据是上一个字节的127倍，假设数据包长度为200，200&gt;127,所以第一个字节放不下，但两个字节可以放下，第一个字节的数据则是（(200%127)0x80）即0xc9，第二个字节为200&#x2F;127，即0x01，所以包长度表示为0xc9，0x01； 可变包头由协议名称，协议版本，连接标识，保持连接时间按顺序构成  其中协议名称由Length MSB，Length LSB和utf-8编码的”MQTT”字符串组成，这样协议名称部分就表示为0x00,0x04,0x4d,0x51,0x54,0x54! 版本占一个字节，MQTT3.1.1为4，即0x04  连接标识 最低位保留 Clean Session：服务器和客户端断开后是否清除数据，为1时自动删除数据 Will Flag：如果Will Flag被设置为1，这意味着，如果连接请求被接受，服务端必须存储一个Will Message，并和网络连接关联起来。之后在网络连接断开的时候必须发布Will Message，除非服务端收到DISCONNECT包删掉了Will Message Will QoS：消息质量等级，0：只发一次；1：至少发一次；2：发且仅发一次。阿里云暂时只支持0和1 Will Retain：表示Will Message在发布之后是否需要保留。如果Will Flag设置为0，那么Will Retain必须是0。 Password Flag：负载中是否包括密码，置一。 User Name Flag：负载里是否包括用户名，直接置一。 这里连接标识我们设置为0xc2。 保持连接时间 表示客户端从发送完成一个控制包到开始发送下一个的最大时间间隔，单位为秒，两个字节长度。例如设置100秒即0x00，0x64。 这样可变包头部分配置完成。 最后负载部分 即数据包传输的数据部分，以连接阿里云connect为例，首先是客户端标识（ClientId）长度和客户端标识，注意长度占两个字节。上一步的连接标识里我们使能了User Name Flag和Password Flag两个标识，所以剩下的内容便是用户名长度(2B)+用户名+密码长度(2B)+密码。 关于客户端标识、用户名、密码等的介绍参考:使用MQTT.fx接入物联网平台 建议先使用MQTT.fx软件先将这些参数确定，防止直接在单片机上跑找不到错误原因。 MQTT协议参考：MQTT Version 3.1.1
-]]></content>
-      <categories>
-        <category>stm32</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>stm32连接到阿里云——阿里云设备创建</title>
-    <url>/2020/04/12/stm32%E8%BF%9E%E6%8E%A5%E5%88%B0%E9%98%BF%E9%87%8C%E4%BA%91-%E9%98%BF%E9%87%8C%E4%BA%91%E8%AE%BE%E5%A4%87%E5%88%9B%E5%BB%BA/</url>
-    <content><![CDATA[首先登陆（没有？注册一个，反正不要钱）阿里云物联网控制台，然后创建产品（产品-&gt;创建产品） 
-
-名称任意，品类建议选择自定义，节点类型选直连，网络选择蜂窝，数据格式一定要选择JSON其它默认即可
-接着添加设备，名称任意，完成后进入设备查看，可以看到我们建立的demo产品下的demo设备（产品是指某一类的设备的类型，如果需要增删改功能需要修改产品而不是设备），这样我们测试的设备就创建好了。阿里云物联网平台收费
 ]]></content>
       <categories>
         <category>stm32</category>
@@ -534,6 +610,18 @@ MCU和云连接已经完成了，接下来就是数据收发
 ]]></content>
       <categories>
         <category>New World</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>stm32连接到阿里云——阿里云设备创建</title>
+    <url>/2020/04/12/stm32%E8%BF%9E%E6%8E%A5%E5%88%B0%E9%98%BF%E9%87%8C%E4%BA%91-%E9%98%BF%E9%87%8C%E4%BA%91%E8%AE%BE%E5%A4%87%E5%88%9B%E5%BB%BA/</url>
+    <content><![CDATA[首先登陆（没有？注册一个，反正不要钱）阿里云物联网控制台，然后创建产品（产品-&gt;创建产品） 
+
+名称任意，品类建议选择自定义，节点类型选直连，网络选择蜂窝，数据格式一定要选择JSON其它默认即可
+接着添加设备，名称任意，完成后进入设备查看，可以看到我们建立的demo产品下的demo设备（产品是指某一类的设备的类型，如果需要增删改功能需要修改产品而不是设备），这样我们测试的设备就创建好了。阿里云物联网平台收费
+]]></content>
+      <categories>
+        <category>stm32</category>
       </categories>
   </entry>
   <entry>
@@ -717,73 +805,6 @@ Android在设置中勾选转发
       </categories>
   </entry>
   <entry>
-    <title>树莓派部署Wordpress博客</title>
-    <url>/2020/06/13/%E6%A0%91%E8%8E%93%E6%B4%BE%E9%83%A8%E7%BD%B2wordpress%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[首先安装Apache
-sudo apt install apache2 -y
-
-安装完成可以在localhost打开，如果是无桌面版的，同一局域网的设备直接访问树莓派ip地址。安装成功则可以在浏览器内看到下列内容
-
-接下来是安装数据库，第一个坑来了，很多老教程是装MySQL，不好意思，新树莓派系统木得，需要换成MriaDB
-sudo apt-get install mariadb-server 
-
-中间问你装不装，填个y，回车。完成后通过下个命令连接mriaDB
-sudo mysql 
-
-出现下图即为成功连接到MariaDB
-
-接着需要给root用户修改密码（自行替换password）
-use mysql; UPDATE user SET password=password(&#x27;password&#x27;) WHERE user=&#x27;root&#x27;; UPDATE user SET plugin=&#x27;mysql_native_password&#x27; WHERE user = &#x27;root&#x27;; flush privileges; exit 
-
-然后重启服务
-sudo systemctl restart mariadb 
-
-之后再新建wordpress的数据库，首先命令行运行
-sudo mysql -uroot -p
-
-接着输入之前设置的数据库密码（password），进入后创建新数据库，注意后面的分号，数据库名也可自行设置
-create database wordpress;
-
-
-接着把数据库权限交给root用户,password为数据库密码
-GRANT ALL PRIVILEGES ON wordpress.* TO &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED BY &#x27;password&#x27;;
-
-还需要刷新数据库权限
-FLUSH PRIVILEGES;
-
-
-安装php和mysql的插件
-sudo apt-get install php php-mysql -y
-
-之后进入 &#x2F;var&#x2F;www&#x2F;html目录，删掉index.html文件，再新建一个index.php
-cd /var/www/htmlsudo rm index.htmlsudo nano index.php
-
-在index.php文件中写入
-&lt;?php phpinfo(); ?&gt;
-
-
-按ctrl+O，再回车，再ctrl+x退出。完成后浏览器刷新页面，页面变成下面这样
-
-这样拍黄片 php就装好了，下面部署wordpress。下载安装包然后解压到&#x2F;var&#x2F;www&#x2F;html目录，由于你懂的原因，直接用树莓派下载太慢，建议用其它设备科学上网下载后再传到树莓派，这里用的是FileZilla，注意需要给文件夹权限否则传输失败，注意主机前的sftp:&#x2F;&#x2F;不可丢
-添加权限命令：
-sudo chomd 777 /var/www/html
-
-
-完成后浏览器刷新页面，出现下图页面，点击现在开始
-
-数据库名填入之前建立的数据库名，数据库用户名，数据库密码，后面两项不要动，然后提交
-
-后面按照提示设置即可
-
-这样基于wordpress的博客就建立好了，这个时候内网可以访问，如果需要外网访问的话自行搜索“内网穿透”
-参考链接:如何在树莓派上搭建 WordPress
-关于在树莓派上不能安装MySql
-]]></content>
-      <categories>
-        <category>New World</category>
-      </categories>
-  </entry>
-  <entry>
     <title>树莓派开箱配置</title>
     <url>/2020/05/04/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%BC%80%E7%AE%B1%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[先点亮再说首先需要给树莓派装系统，需要系统镜像和镜像烧录工具。官方镜像下载，官方提供了三个版本的镜像：无桌面版（Lite）、桌面版和全家桶版（逃 版本按需选择。镜像烧录工具我选Etcher,其它的也行
@@ -850,6 +871,73 @@ sudo reboot
 ]]></content>
       <categories>
         <category>raspberry</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>树莓派部署Wordpress博客</title>
+    <url>/2020/06/13/%E6%A0%91%E8%8E%93%E6%B4%BE%E9%83%A8%E7%BD%B2wordpress%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[首先安装Apache
+sudo apt install apache2 -y
+
+安装完成可以在localhost打开，如果是无桌面版的，同一局域网的设备直接访问树莓派ip地址。安装成功则可以在浏览器内看到下列内容
+
+接下来是安装数据库，第一个坑来了，很多老教程是装MySQL，不好意思，新树莓派系统木得，需要换成MriaDB
+sudo apt-get install mariadb-server 
+
+中间问你装不装，填个y，回车。完成后通过下个命令连接mriaDB
+sudo mysql 
+
+出现下图即为成功连接到MariaDB
+
+接着需要给root用户修改密码（自行替换password）
+use mysql; UPDATE user SET password=password(&#x27;password&#x27;) WHERE user=&#x27;root&#x27;; UPDATE user SET plugin=&#x27;mysql_native_password&#x27; WHERE user = &#x27;root&#x27;; flush privileges; exit 
+
+然后重启服务
+sudo systemctl restart mariadb 
+
+之后再新建wordpress的数据库，首先命令行运行
+sudo mysql -uroot -p
+
+接着输入之前设置的数据库密码（password），进入后创建新数据库，注意后面的分号，数据库名也可自行设置
+create database wordpress;
+
+
+接着把数据库权限交给root用户,password为数据库密码
+GRANT ALL PRIVILEGES ON wordpress.* TO &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED BY &#x27;password&#x27;;
+
+还需要刷新数据库权限
+FLUSH PRIVILEGES;
+
+
+安装php和mysql的插件
+sudo apt-get install php php-mysql -y
+
+之后进入 &#x2F;var&#x2F;www&#x2F;html目录，删掉index.html文件，再新建一个index.php
+cd /var/www/htmlsudo rm index.htmlsudo nano index.php
+
+在index.php文件中写入
+&lt;?php phpinfo(); ?&gt;
+
+
+按ctrl+O，再回车，再ctrl+x退出。完成后浏览器刷新页面，页面变成下面这样
+
+这样拍黄片 php就装好了，下面部署wordpress。下载安装包然后解压到&#x2F;var&#x2F;www&#x2F;html目录，由于你懂的原因，直接用树莓派下载太慢，建议用其它设备科学上网下载后再传到树莓派，这里用的是FileZilla，注意需要给文件夹权限否则传输失败，注意主机前的sftp:&#x2F;&#x2F;不可丢
+添加权限命令：
+sudo chomd 777 /var/www/html
+
+
+完成后浏览器刷新页面，出现下图页面，点击现在开始
+
+数据库名填入之前建立的数据库名，数据库用户名，数据库密码，后面两项不要动，然后提交
+
+后面按照提示设置即可
+
+这样基于wordpress的博客就建立好了，这个时候内网可以访问，如果需要外网访问的话自行搜索“内网穿透”
+参考链接:如何在树莓派上搭建 WordPress
+关于在树莓派上不能安装MySql
+]]></content>
+      <categories>
+        <category>New World</category>
       </categories>
   </entry>
   <entry>
